@@ -10,12 +10,16 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 
 /**
  * Created by Administrator on 2018/6/23.
  */
 
 public class CircleProgress extends View{
+
+       private   int TIME;
         private  Paint mDeafaultPaint;
         private  Paint mColorPaint;
         private  Paint mtextPaint;//某些文字字体
@@ -24,6 +28,7 @@ public class CircleProgress extends View{
         private  Paint airPaint;//绘画某些气体的字体
 
         private RectF rectF=new RectF();
+
         private float Angleper;
         private float Angle;
         private float  radius;//为了绘制矩形区域特地编写的，和半径撤了一些特定的zhi
@@ -40,6 +45,7 @@ public class CircleProgress extends View{
         private String ownerstr;
         private String startnum;
         private String endnum;
+        private String tmpstr;
         private float distance;
         private float topextrawidth;
         private float multiple;
@@ -49,6 +55,7 @@ public class CircleProgress extends View{
         private String so_2;
         private String co;
         private String o_3;
+        private BaseAnimation change;
     public CircleProgress(Context context) {
         super(context);
         init(null,0);
@@ -109,6 +116,7 @@ public class CircleProgress extends View{
              typestr="污染情况";
              situationstr="良好";
              numstr="50";
+             tmpstr=numstr;
              ownerstr="空气质量";
              startnum="0";
              endnum="500";
@@ -118,6 +126,11 @@ public class CircleProgress extends View{
              no_2="15";
              co="26";
              o_3="12";
+             TIME=1000;
+             Angle=Float.parseFloat(numstr)/(Float.parseFloat(endnum)-Float.parseFloat(startnum))*300f;
+             Angleper=Angle;
+        change=new BaseAnimation();
+        change.setDuration(TIME);
     }
 
     @Override
@@ -214,10 +227,40 @@ public class CircleProgress extends View{
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
-    public void setAngle(int i)
+    public void setNumstr(String i)
     {
-        Angle =i;
+      numstr=i;
 
     }
+    public void startBaseAnimation()
+    {
+this.startAnimation(change);
 
+    }
+class BaseAnimation extends Animation
+{
+    public BaseAnimation() {
+        super();
+    }
+
+    @Override
+    protected void applyTransformation(float interpolatedTime, Transformation t) {
+        super.applyTransformation(interpolatedTime, t);
+        int count;
+        if (interpolatedTime<1)
+        {
+            Angle=interpolatedTime*Angleper;
+            count=(int)(interpolatedTime*Integer.parseInt(tmpstr));
+            numstr=String .valueOf(count);
+            Log.i("tah","come here");
+        }else
+        {
+            Angle=Angleper;
+            count=Integer.parseInt(tmpstr);
+            numstr=String .valueOf(count);
+
+        }
+        postInvalidate();
+    }
+}
 }

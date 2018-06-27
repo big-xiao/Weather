@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ import util.Utilty;
 public class MainActivity extends AppCompatActivity {
 ListView listView=null;
     CircleProgress circleProgress;
+    ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,14 +42,18 @@ ListView listView=null;
         Toolbar toolbar=findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-      //  circleProgress=findViewById(R.id.myview);
+       circleProgress=findViewById(R.id.myview);
+       scrollView=findViewById(R.id.scrollView);
+
+       circleProgress.startBaseAnimation();
 
 
 
 
-        RecyclerView recyclerView=findViewById(R.id.recyclerview);
+
+      RecyclerView recyclerView=findViewById(R.id.recyclerview);
           setListView(recyclerView);
-        RecyclerView recyclerView1=findViewById(R.id.recyclerview2);
+       RecyclerView recyclerView1=findViewById(R.id.recyclerview2);
         setnormalListView(recyclerView1);
     }
     public void setListView(RecyclerView recyclerView)//可能还需要一个参数,可以百度一下listview的优化
