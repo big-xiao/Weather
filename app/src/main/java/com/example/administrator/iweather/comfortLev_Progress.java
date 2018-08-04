@@ -17,9 +17,10 @@ import android.view.animation.Transformation;
  * Created by Administrator on 2018/6/23.
  */
 
-public class CircleProgress extends View{
+public class comfortLev_Progress extends View{
 
        private   int TIME;
+
         private  Paint mDeafaultPaint;
         private  Paint mColorPaint;
         private  Paint mtextPaint;//某些文字字体
@@ -40,8 +41,7 @@ public class CircleProgress extends View{
         private  float ownertroke;
         private  float airnumstroke;
         private String typestr;
-        private String situationstr;
-        private String numstr;
+
         private String ownerstr;
         private String startnum;
         private String endnum;
@@ -49,24 +49,22 @@ public class CircleProgress extends View{
         private float distance;
         private float topextrawidth;
         private float multiple;
-        private String pm_10;
-        private String pm_25;
-        private String no_2;;
-        private String so_2;
-        private String co;
-        private String o_3;
+        private String hum;
+        private String uv;
+        private String fl;
+
         private BaseAnimation change;
-    public CircleProgress(Context context) {
+    public comfortLev_Progress(Context context) {
         super(context);
         init(null,0);
     }
 
-    public CircleProgress(Context context, @Nullable AttributeSet attrs) {
+    public comfortLev_Progress(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs,0);
     }
 
-    public CircleProgress(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public comfortLev_Progress(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs,0);
     }
@@ -113,21 +111,20 @@ public class CircleProgress extends View{
              airPaint.setColor(Color.BLUE);
              airPaint.setStyle(Paint.Style.FILL);
              airPaint.setTextSize(airnumstroke);
-             typestr="污染情况";
-             situationstr="良好";
-             numstr="50";
-             tmpstr=numstr;
-             ownerstr="空气质量";
+             typestr="空气湿度";
+             hum="0";
+             uv="弱";
+
+
+             tmpstr=hum;
+             ownerstr="舒适度";
              startnum="0";
-             endnum="500";
-             pm_10="30";
-             pm_25="36";
-             so_2="22";
-             no_2="15";
-             co="26";
-             o_3="12";
+             endnum="100";
+             fl="32℃";
+
+
              TIME=1000;
-             Angle=Float.parseFloat(numstr)/(Float.parseFloat(endnum)-Float.parseFloat(startnum))*300f;
+             Angle=0;
              Angleper=Angle;
         change=new BaseAnimation();
         change.setDuration(TIME);
@@ -139,6 +136,7 @@ public class CircleProgress extends View{
          float standar_y;
         float standar_x;
         float tempvalue;
+
         canvas.drawArc(rectF,120,300,false,mDeafaultPaint);
         canvas.drawArc(rectF,120,Angle,false,mColorPaint);
         Rect textbound1=new Rect();
@@ -149,21 +147,19 @@ public class CircleProgress extends View{
         Rect numbound=new Rect();
         Rect airbound=new Rect();
      mtextPaint.getTextBounds(typestr,0,typestr.length(),textbound1);
-       mtextPaint.getTextBounds(situationstr,0,situationstr.length(),textbound2);
+
         mtextPaint.getTextBounds(ownerstr,0,ownerstr.length(),textbound3);
-        mnumPaint.getTextBounds(numstr,0,numstr.length(),numbound);
+        mnumPaint.getTextBounds(hum,0,hum.length(),numbound);
 
         Log.i("tag",textbound1.toString());
         canvas.drawText(ownerstr,distance,textbound3.height()+distance,mownerPaint);
      canvas.drawText(typestr,rectF.centerX()-(mtextPaint.measureText(typestr)/2),
                 rectF.centerY()-textbound2.height()-multiple*radiu/2-distance,mtextPaint);
 
-     standar_x=standar_y=rectF.centerY()-textbound2.height()-multiple*radiu/2-distance;
+    standar_y=rectF.centerY()-textbound2.height()-multiple*radiu/2-distance;
      standar_x=multiple*radiu/2;//圆环的半径
 
-     canvas.drawText(situationstr,rectF.centerX()-(mtextPaint.measureText(situationstr)/2),
-                rectF.centerY()-textbound2.height(),mtextPaint);
-        canvas.drawText(numstr,rectF.centerX()-(mnumPaint.measureText(numstr)/2),
+        canvas.drawText(hum+"%",rectF.centerX()-(mnumPaint.measureText(hum)/2),
                 rectF.centerY()+numbound.height(),mnumPaint);
         mownerPaint.setStrokeWidth(10);
         mownerPaint.getTextBounds(startnum,0,startnum.length(),textbound4);
@@ -173,38 +169,20 @@ public class CircleProgress extends View{
         canvas.drawText(endnum,rectF.centerX()+multiple*radiu/4-mownerPaint.measureText(startnum)
                 ,rectF.centerY()+multiple*radiu/2+textbound4.height(),mownerPaint);
 
-        canvas.drawText("PM10:",rectF.centerX()+standar_x+4*distance,standar_y,mtextPaint);
-        canvas.drawText(pm_10,rectF.centerX()+standar_x+4*distance+airPaint.measureText("PM10:"),standar_y,airPaint);
 
-        airPaint.getTextBounds(pm_25,0,pm_25.length(),airbound);
-        tempvalue=standar_y+2*distance+airbound.height();
-        canvas.drawText("PM25:",rectF.centerX()+standar_x+4*distance,tempvalue,mtextPaint);
-        canvas.drawText(pm_25,rectF.centerX()+standar_x+4*distance+airPaint.measureText("PM25:"),
+
+        airPaint.getTextBounds(fl,0,fl.length(),airbound);
+        tempvalue=standar_y+4*distance+2*airbound.height();
+        canvas.drawText("体感温度:",rectF.centerX()+standar_x+4*distance,tempvalue,mtextPaint);
+        canvas.drawText(fl,rectF.centerX()+standar_x+4*distance+airPaint.measureText("体感温度:"),
                 tempvalue,airPaint);
 
-        airPaint.getTextBounds(no_2,0,no_2.length(),airbound);
+        airPaint.getTextBounds(uv,0,uv.length(),airbound);
         tempvalue=tempvalue+2*distance+airbound.height();
-        canvas.drawText("NO₂:",rectF.centerX()+standar_x+4*distance,tempvalue,mtextPaint);
-        canvas.drawText(no_2,rectF.centerX()+standar_x+4*distance+airPaint.measureText("NO₂:"),
+        canvas.drawText("紫外线指数:",rectF.centerX()+standar_x+4*distance,tempvalue,mtextPaint);
+        canvas.drawText(uv,rectF.centerX()+standar_x+4*distance+airPaint.measureText("紫外线指数:"),
                 tempvalue,airPaint);
 
-        airPaint.getTextBounds(so_2,0,so_2.length(),airbound);
-        tempvalue=tempvalue+2*distance+airbound.height();
-        canvas.drawText("SO₂:",rectF.centerX()+standar_x+4*distance,tempvalue,mtextPaint);
-        canvas.drawText(so_2,rectF.centerX()+standar_x+4*distance+airPaint.measureText("SO₂:"),
-                tempvalue,airPaint);
-
-        airPaint.getTextBounds(co,0,co.length(),airbound);
-        tempvalue=tempvalue+2*distance+airbound.height();
-        canvas.drawText("CO:",rectF.centerX()+standar_x+4*distance,tempvalue,mtextPaint);
-        canvas.drawText(so_2,rectF.centerX()+standar_x+4*distance+airPaint.measureText("CO:"),
-                tempvalue,airPaint);
-
-        airPaint.getTextBounds(o_3,0,o_3.length(),airbound);
-        tempvalue=tempvalue+2*distance+airbound.height();
-        canvas.drawText("O₃:",rectF.centerX()+standar_x+4*distance,tempvalue,mtextPaint);
-        canvas.drawText(o_3,rectF.centerX()+standar_x+4*distance+airPaint.measureText("O₃:"),
-                tempvalue,airPaint);
 
 
     }
@@ -227,14 +205,37 @@ public class CircleProgress extends View{
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
-    public void setNumstr(String i)
-    {
-      numstr=i;
+
+    public void setHum(String hum) {
+        this.hum = hum;
+        tmpstr=hum;
+        Angle=Float.parseFloat(hum)/(Float.parseFloat(endnum)-Float.parseFloat(startnum))*300f;
+        Angleper=Angle;
+    }
+
+    public void setUv(String uv) {
+        int tmpnum=Integer.parseInt(uv);
+        if(tmpnum>0&tmpnum<=2)
+            this.uv ="最弱";
+        else if (tmpnum>2&tmpnum<=4)
+            this.uv="较弱";
+        else if(tmpnum>4&tmpnum<=6)
+            this.uv="较强";
+        else if(tmpnum>6&tmpnum<=9)
+            this.uv="很强";
+        else if(tmpnum>=10)
+            this.uv="特别强";
 
     }
+
+    public void setFl(String fl) {
+        this.fl = fl;
+    }
+
+
     public void startBaseAnimation()
     {
-this.startAnimation(change);
+     this.startAnimation(change);
 
     }
 class BaseAnimation extends Animation
@@ -251,13 +252,13 @@ class BaseAnimation extends Animation
         {
             Angle=interpolatedTime*Angleper;
             count=(int)(interpolatedTime*Integer.parseInt(tmpstr));
-            numstr=String .valueOf(count);
-            Log.i("tah","come here");
+            hum=String .valueOf(count);
+
         }else
         {
             Angle=Angleper;
-            count=Integer.parseInt(tmpstr);
-            numstr=String .valueOf(count);
+
+            hum= tmpstr;
 
         }
         postInvalidate();
