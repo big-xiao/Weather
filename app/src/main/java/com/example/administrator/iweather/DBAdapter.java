@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class DBAdapter  {
             if(querybyid(bean.getCid())==null)
             {
 
-                Log.i("change","use insert");
+
                 db.insert(DB_TABLE,null,newvalues);
             }
 
@@ -74,7 +74,7 @@ public class DBAdapter  {
 
 
         if (result.getCount()==0||!result.moveToFirst())
-        {  Log.i("change","result count=="+result.getCount());
+        {
             return null;
         }
            return ConvertToCity(result);

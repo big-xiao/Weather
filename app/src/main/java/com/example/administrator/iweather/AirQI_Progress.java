@@ -157,7 +157,7 @@ public class AirQI_Progress extends View{
         mtextPaint.getTextBounds(ownerstr,0,ownerstr.length(),textbound3);
         mnumPaint.getTextBounds(numstr,0,numstr.length(),numbound);
 
-        Log.i("tag",textbound1.toString());
+
         canvas.drawText(ownerstr,distance,textbound3.height()+distance,mownerPaint);
      canvas.drawText(typestr,rectF.centerX()-(mtextPaint.measureText(typestr)/2),
                 rectF.centerY()-textbound2.height()-multiple*radiu/2-distance,mtextPaint);
@@ -288,7 +288,7 @@ class BaseAnimation extends Animation
             Angle=interpolatedTime*Angleper;
             count=(int)(interpolatedTime*tmpnum);
             numstr=String .valueOf(count);
-            Log.i("tah","come here");
+
         }else
         {
             Angle=Angleper;

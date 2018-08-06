@@ -186,17 +186,16 @@ public class sunTime_View extends View {
     public void calculate()
     { int through_time=timeBetween2(firstTime,NowTime);
         int all_time=timeBetween2(firstTime,lastTime);
-        Log.i("suntime","firstTime"+firstTime+"NowTime"+NowTime);
-        Log.i("suntime","through_time=="+through_time+"all_time"+all_time);
+
      if (through_time>=all_time)
      {
          Angle=180;
          Angleper=Angle;
-         Log.i("suntime","angle=="+Angle);
+
      }else
      {
          Angle=180*through_time/all_time;
-         Log.i("suntime","angle=="+Angle);
+
          Angleper=Angle;
      }
 
@@ -231,8 +230,7 @@ public class sunTime_View extends View {
             e.printStackTrace();
         }
         long between_minute=(time2-time1)/(1000*60);
-        Log.i("suntime","starttime"+time1+"");
-        Log.i("suntime","endtime"+time2+"");
+
         return Integer.parseInt(String.valueOf(between_minute));
     }
     class BaseAnimation extends Animation
@@ -252,7 +250,9 @@ public class sunTime_View extends View {
                 Angle=interpolatedTime*Angleper;
 
 
-                Log.i("tah","come here");
+
+
+
             }else
             {
                 Angle=Angleper;

@@ -51,9 +51,19 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".SettingActivity" />
-        <activity android:name=".rate_timeActivity" />
-        <activity android:name=".WeatherinfoActivity"></activity>
+        <activity android:name=".SettingActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:launchMode="singleTask"/>
+        <activity android:name=".WeatherinfoActivity"
+            android:parentActivityName=".SettingActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:launchMode="singleTask"/>
+
+        <service
+            android:name=".updateService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

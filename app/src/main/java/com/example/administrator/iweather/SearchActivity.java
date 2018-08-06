@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -96,7 +97,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 City c = Utilty.handlergetCity(Citystr);
 
-                Log.i("responseText", "填充数据  " + Citystr);
+
                 setgridView(gridView, c);
 
 
@@ -148,7 +149,7 @@ completeTextView.addTextChangedListener(new TextWatcher() {
 
         if(city!=null)
         {
-            Log.i("change","onTextChanged city not null");
+
             setListView(completeTextView,city);
 
         }
@@ -171,7 +172,7 @@ completeTextView.addTextChangedListener(new TextWatcher() {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Map<String ,Object > map1=( Map<String ,Object >)parent.getAdapter().getItem(position);
            String tmp=(String)map1.get("name");
-
+            Log.i("fuckcityname","tmp=="+tmp);
 
             actionstart(SearchActivity.this,tmp);
 
@@ -190,12 +191,6 @@ completeTextView.addTextChangedListener(new TextWatcher() {
     public   void setListView(AutoCompleteTextView completeTextView,City c)
     {
 
-             if (c==null)
-             {
-
-                 Log.i("change","类为空");
-                 return;
-             }
 
         List<String> list=new ArrayList<>();
 
@@ -239,7 +234,7 @@ completeTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onResponse(Response response) throws IOException {
                     final String responseText = response.body().string();
-                    Log.i("responseText","请求  "+responseText);
+
                     final City city= Utilty.handlergetCity(responseText);
 
 
@@ -284,11 +279,7 @@ completeTextView.addTextChangedListener(new TextWatcher() {
     public   void setgridView(GridView gridView,City c)//这个函数也许可以放在设置天气那个地方使用
     {
 
-        if(c.getBasic()==null)
-        {
-            Log.w("worry","这个类为空2");
-            return;
-        }
+
 
         List<Map<String ,Object >> list=new ArrayList<>();
         Map<String ,Object > map1=new HashMap<>();

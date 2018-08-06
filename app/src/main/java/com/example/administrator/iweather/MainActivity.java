@@ -79,6 +79,7 @@ SwipeRefreshLayout swipeRefreshLayout=null;
     comfortLev_Progress cfLev=null;
     Toolbar toolbar=null;
     ImageButton button=null;
+    ImageButton button2=null;
     TextView toolbartitle=null;
     TextView t1=null;//目前温度
     TextView t2=null;//目前天气
@@ -132,7 +133,9 @@ SwipeRefreshLayout swipeRefreshLayout=null;
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
         initData();
+
     }
 
     public void initView()
@@ -153,6 +156,7 @@ SwipeRefreshLayout swipeRefreshLayout=null;
         swipeRefreshLayout=findViewById(R.id.main_srl);
         toolbartitle=findViewById(R.id.textView2);
         button=findViewById(R.id.imageButton2);
+        button2=findViewById(R.id.imageButton);
         t1=findViewById(R.id.textView);
         t2=findViewById(R.id.textView4);
         t3=findViewById(R.id.textView5);
@@ -203,10 +207,11 @@ SwipeRefreshLayout swipeRefreshLayout=null;
 /*todo 网络请求的数据*/
 
         String cityname = getIntent().getStringExtra("param1");
-        Log.i("button","come from searchActivity button"+cityname);
+Log.i("fuckcityname","city=="+cityname);
         if (!TextUtils.isEmpty(cityname)) {
             if(cityname.equals("当前位置"))
             {
+                Log.i("dingwei","come in sdk before");
                 LocationClientOption option = new LocationClientOption();
                 option.setIsNeedAddress(true);              // 获得详细地址
                 mlocationClient.setLocOption(option);
@@ -249,7 +254,7 @@ SwipeRefreshLayout swipeRefreshLayout=null;
 
                     if(weatherstr==null&&AQIstr==null&&Sun_timestr==null)//第一次进入
                     {
-                        Log.i("dingwei","come initData() ");
+
                         LocationClientOption option = new LocationClientOption();
                         option.setIsNeedAddress(true);              // 获得详细地址
                         mlocationClient.setLocOption(option);
@@ -266,7 +271,7 @@ SwipeRefreshLayout swipeRefreshLayout=null;
                         Weather w=Utilty.handlergetWeather(weatherstr);
                         Airquality a=Utilty.handlergetAQI(AQIstr);
                         Sun_time s=Utilty.handlergetSun_time(Sun_timestr);
-                        Log.i("responseText","填充数据  "+Sun_timestr);
+
                         setweatherinfo(w);
                         setAQIinfo(a);
 
@@ -287,9 +292,9 @@ SwipeRefreshLayout swipeRefreshLayout=null;
 
 
     }
-    public void initListenner()
+  public void initListenner()
     {
-        betterScrollView.setListenner(new BetterScrollView.ScrollViewListenner() {
+          betterScrollView.setListenner(new BetterScrollView.ScrollViewListenner() {
             @Override
             public void scrollOritention(int l, int t, int oldl, int oldt,MotionEvent e) {
 
@@ -310,6 +315,16 @@ SwipeRefreshLayout swipeRefreshLayout=null;
                 }
             }
         });
+
+        recyclerView1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+
+        });
+
+
 /*todo 这里还有swiperefresh的监听器*/
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -360,7 +375,18 @@ SwipeRefreshLayout swipeRefreshLayout=null;
             }
         });
 
-
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v==button2)
+                {
+                    Intent i=new Intent(MainActivity.this,SettingActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
+        Intent intent = new Intent(MainActivity.this, updateService.class);
+        startService(intent);
     }
 public  void  showError()
 {
@@ -395,11 +421,7 @@ public  void  showError()
         ArrayList<Integer> ID=new ArrayList<>();
         ArrayList<String> TIME=new ArrayList<>();
         ArrayList<String> TMP=new ArrayList<>();
-        if(w.getHourly()==null)
-        {
-            Log.w("worry","这个类为空1");
-            return;
-        }
+
         for (Weather.HourlyBean bean:w.getHourly())
         {
             String weatherCode = "weather_"+bean.getCond_code();
@@ -433,11 +455,7 @@ public  void  showError()
         ArrayList<Integer> ID=new ArrayList<>();
         ArrayList<String> DATE=new ArrayList<>();
         ArrayList<String> TMP=new ArrayList<>();
-        if(w.getDaily_forecast()==null)
-        {
-            Log.w("worry","这个类为空2");
-            return;
-        }
+
         Weather.DailyForecastBean bean=null;
         for (int i=0;i<4;i++)
         {
@@ -458,8 +476,16 @@ public  void  showError()
         }
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
+            @Override
+            public boolean canScrollVertically() {
+                // 直接禁止垂直滑动
+                return false;
+            }
+        };
+
         recyclerView.setLayoutManager(linearLayoutManager);
+
        FishAdapter galleryAdapter=new FishAdapter(this,DATE,TMP,id);
         recyclerView.setAdapter(galleryAdapter);
 
@@ -608,7 +634,7 @@ runOnUiThread(new Runnable() {
                 @Override
                 public void onResponse(Response response) throws IOException {
                     final String responseText = response.body().string();
-                    Log.i("responseText","请求  "+responseText);
+
                     final Sun_time sun_time=Utilty.handlergetSun_time(responseText);
 
 
@@ -626,7 +652,7 @@ runOnUiThread(new Runnable() {
 
                                 editor.putString("Sun_timecontent", responseText);
                                 editor.apply();
-                                Log.i("responseText","存储文件  "+sh.getString("AQIcontent",null));
+
                                setSun_timeinfo(sun_time);
 
                             }else
@@ -702,7 +728,7 @@ t3.setText(w.getDaily_forecast().get(0).getTmp_max()+"℃/"+w.getDaily_forecast(
             sunview.setFirstTime_str(s.getSun().get(0).getSr());
             sunview.setLastTime_str(s.getSun().get(0).getSs());
             sunview.calculate();
-            Log.i("responseText","填充数据  "+s.getSun().get(0).getSs());
+
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -721,15 +747,18 @@ t3.setText(w.getDaily_forecast().get(0).getTmp_max()+"℃/"+w.getDaily_forecast(
             if (currentPosition ==null)
             {
                 int type =mlocationClient.requestLocation();
-                Log.i("baidujianshiqi",""+currentPosition);
+
             }
-           Log.i("baidujianshiqi","come onReceibeLocation"+currentPosition);
+
             editor.putString("cityname",currentPosition);
+
             editor.apply();
+            Log.i("dingwei","currentposition"+currentPosition);
             requestweather(currentPosition);
             requestSun_time(currentPosition);
             requestAQI(currentPosition);
             Toast.makeText(getApplicationContext(),"定位成功", Toast.LENGTH_LONG).show();
+            mlocationClient.stop();
         }
     }
 

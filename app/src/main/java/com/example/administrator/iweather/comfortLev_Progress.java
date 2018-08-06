@@ -8,7 +8,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
+
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -151,7 +151,7 @@ public class comfortLev_Progress extends View{
         mtextPaint.getTextBounds(ownerstr,0,ownerstr.length(),textbound3);
         mnumPaint.getTextBounds(hum,0,hum.length(),numbound);
 
-        Log.i("tag",textbound1.toString());
+
         canvas.drawText(ownerstr,distance,textbound3.height()+distance,mownerPaint);
      canvas.drawText(typestr,rectF.centerX()-(mtextPaint.measureText(typestr)/2),
                 rectF.centerY()-textbound2.height()-multiple*radiu/2-distance,mtextPaint);
